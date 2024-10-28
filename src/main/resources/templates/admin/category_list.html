@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh Sách Danh Mục</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<header class="bg-primary text-white text-center py-3">
+    <h1>Catgory list:</h1>
+    <a class="btn btn-success" th:href="@{/admin/categories/add}">Thêm Danh Mục</a>
+</header>
+<main class="container mt-4">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>STT</th>
+            <th>Images</th>
+            <th>CategoryID</th>
+            <th>CategoryName</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cate, iterStat : ${listcate}">
+            <td th:text="${iterStat.index + 1}"></td>
+            <td>
+                <img th:src="${cate.images != null && cate.images.startsWith('https') ? cate.images : '/image?fname=' + cate.images}"
+                     alt="Hình Ảnh" height="150" width="200"/>
+            </td>
+            <td th:text="${cate.id}"></td>
+            <td th:text="${cate.name}"></td>
+            <td>
+                <span th:text="${cate.status == 1 ? 'Hoạt Động' : 'Khóa'}"></span>
+            </td>
+            <td>
+                <a th:href="@{/admin/categories/edit/{id}(id=${cate.id})}" class="btn btn-warning">Sửa</a>
+                <form th:action="@{/admin/categories/delete/{id}(id=${cate.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${#lists.isEmpty(listcate)}" class="alert alert-warning">Chưa có danh mục nào.</div>
+</main>
+
+</body>
+</html>
